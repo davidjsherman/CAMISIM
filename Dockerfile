@@ -10,6 +10,7 @@ ADD scripts /usr/local/bin/scripts
 ADD tools /usr/local/bin/tools
 ADD defaults /usr/local/bin/defaults
 ADD ete2.patch /
-RUN patch /usr/local/lib/python2.7/dist-packages/ete2/ncbi_taxonomy/ncbiquery.py ete2.patch
+RUN patch $(python -c "import ete2 as _; print(_.__path__[0])")/ncbi_taxonomy/ncbiquery.py ete2.patch
+ENV HOME=/tmp
 WORKDIR /usr/local/bin
 ENTRYPOINT ["python"]

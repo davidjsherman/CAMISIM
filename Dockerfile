@@ -11,6 +11,9 @@ ADD tools /usr/local/bin/tools
 ADD defaults /usr/local/bin/defaults
 ADD ete2.patch /
 RUN patch $(python -c "import ete2 as _; print(_.__path__[0])")/ncbi_taxonomy/ncbiquery.py ete2.patch
-ENV HOME=/tmp
-WORKDIR /usr/local/bin
-ENTRYPOINT ["python"]
+ADD docker_entrypoint.sh /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+RUN useradd -d /tmp camisim
+USER camisim
+

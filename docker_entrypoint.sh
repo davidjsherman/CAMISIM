@@ -23,7 +23,7 @@ touch "$HOME/." || export HOME=${TMPDIR:=/tmp}
 
 # The container can be invoked with extra arguments, in environment
 # variables to avoid polluting the CLI arguments.
-[ -s "$TAXDB" -a ! -s $ETE2_TAXDB ] && cp "$TAXDB" $ETE2_TAXDB
+[ -s "$TAXDB" -a ! -s $ETE2_TAXDB ] && mkdir -p $(dirname $ETE2_TAXDB) && cp "$TAXDB" $ETE2_TAXDB
 
 # Preload ete2 taxonomy, in $HOME, which is writeable, rather than in
 # $CAMISIM, which might not be.

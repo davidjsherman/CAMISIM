@@ -18,11 +18,9 @@ CASISIM=${CAMISIM:-/usr/local/bin}
 # only the output and temporary directories need be writeable.
 touch "$HOME/." || export HOME=${TMPDIR:=/tmp}
 
-# Location of the taxonomy source file expected by ete2.
-TAXDUMP=$HOME/taxdump.tar.gz
-
 # The container can be invoked with extra arguments, in environment
 # variables to avoid polluting the CLI arguments.
+[ -s "$TAXDB" ] ln -s "$TAXDB" $HOME/.etetoolkit/taxa.sqlite
 # Reuse boolean argument variables for output file names.
 [ "$KEEP_TAXDB" ] && KEEP_TAXDB=$HOME/out-taxa.sqlite
 

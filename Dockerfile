@@ -16,7 +16,7 @@ ADD ete2.patch /
 RUN patch $(python -c "import ete2 as _; print(_.__path__[0])")/ncbi_taxonomy/ncbiquery.py ete2.patch
 
 ADD docker_entrypoint.sh $CAMISIM/entrypoint.sh
-ENTRYPOINT ["$CAMISIM/entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "$CAMISIM/entrypoint.sh"]
 
 RUN useradd -d /tmp camisim
 USER camisim

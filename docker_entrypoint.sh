@@ -20,7 +20,7 @@ touch "$HOME/." || export HOME=${TMPDIR:=/tmp}
 
 # The container can be invoked with extra arguments, in environment
 # variables to avoid polluting the CLI arguments.
-[ -s "$TAXDB" ] ln -s "$TAXDB" $HOME/.etetoolkit/taxa.sqlite
+[ -s "$TAXDB" ] && ln -s "$TAXDB" $HOME/.etetoolkit/taxa.sqlite
 # Reuse boolean argument variables for output file names.
 [ "$KEEP_TAXDB" ] && KEEP_TAXDB=$HOME/out-taxa.sqlite
 

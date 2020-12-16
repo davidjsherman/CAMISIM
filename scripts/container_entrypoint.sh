@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Set up an environment for running CAMISIM in a container, even when
 # the container is run read-only (e.g. CWL) and even when the user is

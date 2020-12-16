@@ -9,6 +9,8 @@
 # directory; and by ete2, that it can write both in its invocation
 # directory and in $HOME.
 
+echo Invocation $@
+
 # CAMISIM expects to be invoked from its install directory.
 # In an ideal world this variable is set by the container image.
 CASISIM=${CAMISIM:-/usr/local/bin}

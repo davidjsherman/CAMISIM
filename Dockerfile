@@ -19,3 +19,6 @@ RUN patch $(python -c "import ete2 as _; print(_.__path__[0])")/ncbi_taxonomy/nc
 RUN rm -rf /requirements.txt /ete2.patch /var/lib/{apt,dpkg,cache,log} ~/.cache ~/.cpan 
 
 ENTRYPOINT ["sh", "-c", "$CAMISIM/scripts/container_entrypoint.sh"]
+
+RUN useradd -d /tmp camisim
+USER camisim

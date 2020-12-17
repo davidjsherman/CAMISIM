@@ -12,28 +12,36 @@
 echo Invocation $@
 
 # CAMISIM expects to be invoked from its install directory.
-# In an ideal world this variable is set by the container image.
+# In an ideal world this variable is set by a container image.
 CASISIM=${CAMISIM:-/usr/local/bin}
 
-# Location of the taxonomy database created by ete2.
+# Location of the taxonomy database expected or created by ete2.
 ETE2_TAXDB=$HOME/.etetoolkit/taxa.sqlite
 
 # $HOME must be writeable, even if the container user is unprivileged.
-# Note as per [4.2](https://www.commonwl.org/v1.1/CommandLineTool.html#Runtime_environment)
-# only the output and temporary directories need be writeable.
+# Note that when invoking from CWL, only the output and temporary
+# directories are guaranteed to be writeable, as per
+# [4.2](https://www.commonwl.org/v1.1/CommandLineTool.html#Runtime_environment)
 touch "$HOME/." || export HOME=${TMPDIR:=/tmp}
 
-# The container can be invoked with extra arguments, in environment
-# variables to avoid polluting the CLI arguments.
-[ -s "$TAXDB" -a ! -s $ETE2_TAXDB ] && mkdir -p $(dirname $ETE2_TAXDB) && cp "$TAXDB" $ETE2_TAXDB
+# # The container can be invoked with extra arguments, in environment
+# # variables to avoid polluting the CLI arguments.
+# [ -s "$TAXDB" -a ! -s $ETE2_TAXDB ] && mkdir -p $(dirname $ETE2_TAXDB) && cp "$TAXDB" $ETE2_TAXDB
 
-# Preload ete2 taxonomy, in $HOME, which is writeable, rather than in
+# If the current working directory of this invocation isn't $HOME but does
+# contain an ete2 taxonomy dump, copy the dump to the expected place.
+# (This can happen in containers with unexpected bind mounts.)
+[ -s ./.etetoolkit/taxa.sqlite -a ! ./.etetoolkit/taxa.sqlite -ef $ETE2_TAXDB ] &&
+    mkdir -p $(dirname $ETE2_TAXDB) &&
+    cp ./.etetoolkit/taxa.sqlite $ETE2_TAXDB
+
+# Preload the ete2 taxonomy, in $HOME, which is writeable, rather than in
 # $CAMISIM, which might not be.
 echo -e "from ete2 import NCBITaxa\nNCBITaxa()" |
     (cd $HOME && python)
 
-# Copy taxonomy file to output if requested.
-[ "$KEEP_TAXDB" ] && cp $ETE2_TAXDB $HOME/out-taxa.sqlite
+# # Copy taxonomy file to output if requested.
+# [ "$KEEP_TAXDB" ] && cp $ETE2_TAXDB $HOME/out-taxa.sqlite
 
 # MAIN EVENT: run the selected program in the expected directory,
 # return exit code.

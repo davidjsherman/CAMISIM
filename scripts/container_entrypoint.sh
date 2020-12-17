@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Set up an environment for running CAMISIM in a container, even when
 # the container is run read-only (e.g. CWL) and even when the user is
@@ -9,7 +9,7 @@
 # directory; and by ete2, that it can write both in its invocation
 # directory and in $HOME.
 
-echo Invocation $@
+echo Container entrypint invocation\ -- "$@"
 
 # CAMISIM expects to be invoked from its install directory.
 # In an ideal world this variable is set by a container image.
@@ -45,4 +45,4 @@ echo -e "from ete2 import NCBITaxa\nNCBITaxa()" |
 
 # MAIN EVENT: run the selected program in the expected directory,
 # return exit code.
-cd $CAMISIM && exec python $@
+cd $CAMISIM && exec python "$@"

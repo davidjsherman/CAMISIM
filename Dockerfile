@@ -7,7 +7,7 @@ ADD requirements.txt /requirements.txt
 RUN perl -pi -e 'print "scipy==0.16.0\npandas==0.24.1\n" if ($.==2)' /requirements.txt
 RUN cat requirements.txt | xargs -n 1 pip install
 
-ENV CAMISIM=/usr/local/bin
+ARG CAMISIM=/usr/local/bin
 
 ADD *.py $CAMISIM/
 ADD scripts $CAMISIM/scripts
@@ -18,7 +18,10 @@ RUN patch $(python -c "import ete2 as _; print(_.__path__[0])")/ncbi_taxonomy/nc
 
 # RUN rm -rf /requirements.txt /ete2.patch /var/lib/{apt,dpkg,cache,log} ~/.cache ~/.cpan 
 
-ENTRYPOINT ["sh", "-c", "exec $CAMISIM/scripts/container_entrypoint.sh $@"]
+# ENTRYPOINT ["sh", "-c", "exec $CAMISIM/scripts/container_entrypoint.sh $0 $@"]
+ENTRYPOINT $CAMISIM/scripts/container_entrypoint.sh
+
+ENV CAMISIM=$CAMISIM
 
 # RUN useradd -d /tmp camisim
 # USER camisim
